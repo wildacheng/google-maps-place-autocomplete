@@ -1,26 +1,54 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import PlacesAutocomplete from "react-places-autocomplete";
+import scriptLoader from "react-async-script-loader";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+function App({ isScriptLoaded, isScriptLoadSucceed }) {
+  const [address, setAddress] = React.useState("");
+
+  if (isScriptLoaded && isScriptLoadSucceed) {
+    return (
+      <div>
+        <PlacesAutocomplete
+          value={address}
+          onChange={setAddress}
+          onSelect={setAddress}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+          {({
+            getInputProps,
+            suggestions,
+            getSuggestionItemProps,
+            loading,
+          }) => (
+            <div>
+              <input
+                {...getInputProps({
+                  placeholder: "Enter Address...",
+                })}
+              />
+              <div>
+                {loading && <div>Loading...</div>}
+                {suggestions.map((suggestion) => {
+                  const style = suggestion.active
+                    ? { backgroundColor: "#a83232", cursor: "pointer" }
+                    : { backgroundColor: "#ffffff", cursor: "pointer" };
+
+                  return (
+                    <div {...getSuggestionItemProps(suggestion, { style })}>
+                      {suggestion.description}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </PlacesAutocomplete>
+      </div>
+    );
+  } else {
+    return <div></div>;
+  }
 }
 
-export default App;
+export default scriptLoader([
+  `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAP_API}&libraries=places`,
+])(App);
