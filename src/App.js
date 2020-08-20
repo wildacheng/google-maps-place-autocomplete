@@ -5,13 +5,21 @@ import scriptLoader from "react-async-script-loader";
 function App({ isScriptLoaded, isScriptLoadSucceed }) {
   const [address, setAddress] = React.useState("");
 
+  const handleChange = (value) => {
+    setAddress(value)
+  }
+
+  const handleSelect = (value) => {
+    setAddress(value)
+  }
+
   if (isScriptLoaded && isScriptLoadSucceed) {
     return (
       <div>
         <PlacesAutocomplete
           value={address}
-          onChange={setAddress}
-          onSelect={setAddress}
+          onChange={handleChange}
+          onSelect={handleSelect}
         >
           {({
             getInputProps,
