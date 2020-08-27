@@ -1,3 +1,3 @@
 # Tutorial: Google Maps Place Autocomplete in React
 
-video:
+video: https://youtu.be/rxHKNeTfS-k
